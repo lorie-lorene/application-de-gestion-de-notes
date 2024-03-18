@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>exams</title>
+	<link rel="stylesheet" type="text/css" th:href="@{css/exams.css}">
+	<link href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap" rel="stylesheet">
+	<script src="https://kit.fontawesome.com/a81368914c.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="UTF-8">
+</head>
+<body>
+<div class="table">
+<div class="table_header">
+<p> Liste  des evaluations </p>
+	<div> 
+        <form th:action="@{/exam/new}">
+	<button  type ="submit" class="add_new1"> + Add_New exams </button>
+        </form>
+	</div>
+</div>
+	<div class= "table_section">
+	<table> 
+	<thead>
+	 <tr>
+    <th>id </th>
+    <th> type d'examen</th>
+    <th> date</th>
+    <th>bareme </th>
+    <th>semestre </th>
+    <th> UE </th>
+    <th>actions </th>
+    </tr>
+</thead>
+<tbody>
+    <th:block th:each=" category: ${listExam}">
+        <tr>
+            <td>[[${category.id}]] </td>
+            <td>[[${category.typeEval}]] </td>
+            <td>[[${category.dateEval}]] </td>
+            
+            <td>[[${category.noteSur}]] </td>
+            <td>[[${category.semestre}]] </td>
+            <td>[[${category.ue.code}]] </td>
+            <td>
+               <button  onclick="updateRow(this)" class="add_new" > <a th:href="@{'/exam/edit/' + ${category.id}}">🖋</a></button>
+                
+               <button class="add_news" ><a th:href="@{'/exam/delete/' + ${category.id}}">❌</a></button>
+            </td>
+        </tr>
+    </th:block>
+</tbody>
+     </table>
+	
+
