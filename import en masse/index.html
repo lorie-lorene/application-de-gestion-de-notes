@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/boxicons.min.css"> -->
+    <link href="css/a.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/style1.css" />
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <title>imports</title>
+
+        <!-- ======= MATERIAL ICON CDN ========= -->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+
+        <!-- ======= GOOGLE FONTS CDN ========= -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="js/modernizr.custom.js"></script>
+</head>
+
+<body>
+
+    <nav>
+        <div class="container">
+            <img src="img/Blason.svg"  width="130" height="80" alt="" class="logo" >
+            <!-- <div class="search-bar">
+                <span class="material-icons-sharp">search</span>
+                <input type="search" placeholder="Search">
+            </div> -->
+            
+            <div class="profile-area">
+                <div class="nav-content">
+                    <div class="tools dropdown-toggle" id="trigger-overlay" style="cursor: pointer;">
+                        <span class="material-icons-sharp">dashboard</span>
+                        <p>All Tools</p>
+                        <div class="overlay overlay-hugeinc"><!-- effet ici -->
+                            <button type="button" class="overlay-close">Close</button>
+                            <div>
+                                <ul>
+                                    <li class="card"><br>  <a href="/index-import">Accueil</a>  </br></li>
+                                    <li class="card"><br>  <a href="/etudiant">Anonymat</a>  </br></li>
+                                    <li class="card"><br>  <a href="/correction/juryCorr">Correction</a>  </br></li>
+                                    <li class="card"><br>  <a href="/">Deliberation</a>  </br></li>
+                                    <li class="card"><br>  <a href="/etudiant/">Import</a>  </br></li>
+                                    <!-- <li><a href="@{'/etudiant/edit/' + ${category.id}}">Diaporamas</a></li><br></br> -->
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="theme-btn">
+                        <span class="material-icons-sharp active">light_mode</span>
+                        <span class="material-icons-sharp">dark_mode</span>
+                    </div>
+                    <div class="laguage-btn">
+                        <span class="material-icons-sharp">language</span>
+                        <p>Language</p>
+                    </div>
+                </div>
+                <div class="profile" style="cursor: pointer;">
+                    <h5 th:text="${user.nom}"></h5>
+                    <!-- <span class="material-icons-sharp">expand_more</span> -->
+                    <div class="profile-photo">
+                        <img src="img/Group 2.png" alt="">
+                    </div>
+                </div>
+
+                
+                <!-- <button id="menu-btn">
+                    <span class="material-icons-sharp">menu</span>
+                </button> -->
+            </div>
+        </div>
+    </nav>
+
+    <div id="top-button">
+        <button id="bt1" onclick="changebtn('bt1')">Notes</button>
+        <button id="bt2" onclick="changebtn('bt2')">Examens</button>
+        <!-- <a  th:href="@{/formulaire}"><button id="bt3">Anonymat</button></a>
+        <a  th:href="@{/exam/new}"><button id="bt3">Creer Evaluation</button></a> -->
+    </div>
+    <div id="container">
+        <div id="group1">
+            <div id="notes"></div>
+        </div>
+
+        <div id="group2">
+            <div id="import">
+                <button id="upload"><label for="file"><i class="bi bi-upload"></i> Upload</label></button>
+                <input id="file" class="input-file" accept=".xlsx " name="file" type="file" onchange="drad_and_drop()">
+            </div>
+            <div id="delete-block">
+                <button id="delete" onclick="del('notes')"><i class="bi bi-x-square-fill"></i></button>
+            </div>
+        </div>
+        <div id="consulting-block">
+            <form id="form2" method="post" th:action="@{/import}" onsubmit="return formulaire(event)"
+                enctype="multipart/form-data">
+                <input id="valider" type="submit" value="valider">
+            </form>
+        </div>
+
+    </div>
+
+    <div id="watch">
+        <table id="customers">
+            <tr>
+                <th>#Numero </th>
+                <th>Examen</th>
+                <th>Status</th>
+                <th>Progression</th>
+                <th>Date Evaluation </th>
+                <th>Action</th>
+            </tr>
+            <tr th:each="evaluation: ${evaluation}">
+                <!-- <tr th:each="part: ${part}"> -->
+                <td><span th:text="${evaluation.id}"></span></td>
+                <!-- <td>INF231_TP_S1_2023_30</td> -->
+                <td><span
+                        th:text="${evaluation.ue.code + '_' + evaluation.typeEval + '_S' + evaluation.semestre + '_' + #dates.format(evaluation.dateEval, 'yyyy') + '_'+evaluation.noteSur + '_' +evaluation.ue.filiere.code}"></span>
+                </td>
+                <td style="color: #50ac57; display: none;"><button id="check"><i
+                            class="bi bi-check"></i></button>Complete</td>
+                <td style="color: rgb(133, 29, 29);"><button id="no-check"><i class="bi bi-x"></i></button>Incomplete
+                </td>
+                <td>En attente d'importation...</td>
+                <td><span th:text="${evaluation.dateEval}"></span></td>
+                <td><button id="eye" th:attr="onclick='exports(\'' + ${evaluation.typeEval} + '\', \'' + ${evaluation.ue.code} + '\',\'' + ${evaluation.ue.filiere.code} + '\')'"><i class="bi bi-filetype-xls"></i></button> <button disabled id="trach"
+                        th:attr="onclick='trach(\'' + ${evaluation.typeEval} + '\', \'' + ${evaluation.ue.code} + '\',\'' + ${evaluation.ue.filiere.code} + '\')'"><i
+                            class="bi bi-trash"></i></button> <button disabled id="download" th:attr="onclick='download(\'' + ${evaluation.typeEval} + '\', \'' + ${evaluation.ue.code} + '\',\'' + ${evaluation.semestre} + '\')'"><i
+                            class="bi bi-download"></i></button> <button id="saisir" th:attr="onclick='look(\'' + ${evaluation.typeEval} + '\', \'' + ${evaluation.ue.code} + '\',\'' + ${evaluation.ue.filiere.code} + '\', event)'"><i class="bi bi-pencil"></i></button> <button disabled id="valide" th:attr="onclick='valide(\'' + ${evaluation.typeEval} + '\', \'' + ${evaluation.ue.code} + '\',\'' + ${evaluation.ue.filiere.code} + '\')'"><i class="bi bi-check-circle-fill"></i></button> </td>
+                <!-- <span th:text="${evaluation.ue.filiere.code}"></span> -->
+                <!-- </tr> -->
+            </tr>
+            <!-- onclick="afficherMessage('${person.nom}', ${person.age})" -->
+        </table>
+        <div th:each="list: ${list}" style="display: none;" id="list">
+
+            <span th:text="${list}"></span>
+            
+        </div >
+        <div th:each="status: ${status}" style="display: none;" id="status">
+
+            <span class="status-code" th:text="${status.evaluation.ue.code}"></span>
+            <span class="status-type" th:text="${status.evaluation.typeEval}"></span>
+            <span class="status-valid" th:text="${status.valide}"></span>
+            
+        </div >
+        
+    </div>
+    <div style="display: none;" id="data">
+        <table>
+            <tr>
+                <th>Matricule</th>
+                <th>Noms et Prenoms</th>
+                <th>Note</th>
+            </tr>
+            <tr  th:each="participes: ${participes}">
+                <td><span th:text="${participes.matricule}"></span></td>
+                <td><span th:text="${participes.nomEtudiant}"></span></td>
+                <td><span th:text="${participes.note}"></span></td>
+            </tr>
+        </table>
+    </div>
+
+    <div style="display: none;" id="datas">
+        <table id="personsTable">
+            <tr>
+                <th>Matricule</th>
+                <th>Nom</th>
+                <th>Note</th>
+            </tr>
+            <!-- Boucle pour afficher les personnes -->
+            <tr th:if="${persons == null}" th:each="person : ${personns}">
+                <td th:text="${person.id}" style="display: none;"></td>
+                <td>
+                    <input type="text" class="matricule" th:value="${person.matricule}" style="text-align: center;"/>
+                </td>
+                <td>
+                    <input type="text" class="nom" th:value="${person.nomEtudiant}" style="width: 300px; text-align: center;"/>
+                </td>
+                <td>
+                    <input type="number" class="note" th:value="${person.note}" style="text-align: center;"/>
+                </td>
+                <td><button onclick="deleteRow(this)">❌</button></td>
+            </tr>
+            <tr th:if="${personns == null}" th:each="persons : ${persons}">
+                <td th:text="${persons.id}" style="display: none;"></td>
+                <td>
+                    <input type="text" class="matricule" th:value="${persons.matricule}" style="text-align: center;"/>
+                </td>
+                <td>
+                    <input type="text" class="nom" th:value="${persons.nom}" style="width: 300px; text-align: center;"/>
+                </td>
+                <td>
+                    <input type="number" class="note" style="text-align: center;"/>
+                </td>
+                <td><button onclick="deleteRow(this)">❌</button></td>
+            </tr>
+           
+        </table>
+        <button id="validerer" onclick="okkkk()" >Valider</button>
+        <button id="adeds" onclick="addRow()" style="width: 100px; margin-left: auto; margin-right: auto; "><i class="bi bi-plus-lg"></i>Add Row</button>
+    </div>
+
+
+
+    <footer id="footer" class="footer">
+        <div class="copyright">
+          &copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
+        </div>
+        <div class="credits">
+          Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+        </div>
+      </footer><!-- End Footer -->
+
+</body>
+<script src="js/xlsx.full.min.js"></script>
+<!-- <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script> -->
+<script src="js/index.js"></script>
+<script src="js/classie.js"></script>
+<script src="js/demo1.js"></script>
+
+
+</html>

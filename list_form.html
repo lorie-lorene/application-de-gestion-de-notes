@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>exams</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/exams.css}">
+	<!--<link rel="stylesheet" type="text/css" th:href="@{exams.css}">-->
+	<!-- <link href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap" rel="stylesheet"> -->
+	<script src="https://kit.fontawesome.com/a81368914c.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/a.css}" rel="stylesheet">
+    <!-- th:href="@{/css/style.css}"   th:src="@{/js/script.js}" -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style1.css}" />
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <!-- <title>imports</title> -->
+
+        <!-- ======= MATERIAL ICON CDN ========= -->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+
+        <!-- ======= GOOGLE FONTS CDN ========= -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+        <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+        <script th:src="@{/js/modernizr.custom.js}"></script>
+</head>
+
+<body>
+
+<script>
+
+    $(document).ready(function() {
+            $('#nom').on("input",function() {
+                var nom= $(this).val();
+console.log(nom)
+                if (nom.length>=1) {
+                    $.ajax({
+                        url: '/suggestions',
+                        type:'GET',
+                        data: { nom: nom },
+                        success: function(data) {
+                            $('#suggestions').empty();
+                            data.forEach(function(suggestion) {
+
+                                $('#suggestions').append("<option value='"+ suggestion + "'>");
+
+    var dataList = document.getElementById('suggestions');
+                            // console.log(dataList)
+                            dataList.addEventListener('click', function(event) {
+                              console.log("ok")
+                              var clickedOption = event.target;
+                              if (clickedOption.tagName === 'OPTION') {
+                                  console.log("okdd")
+                                var optionValue = clickedOption.value;
+                                myFunction(optionValue);
+                              }
+                            });
+
+                         });
+
+
+
+ }
+  });
+
+
+                } 
+            });
+       })
+
+
+    </script>
+<!--affichage des noms-->
+<nav>
+    <div class="container">
+        <img src="img/Blason.svg"  width="130" height="80" alt="" class="logo" >
+        <!-- <div class="search-bar">
+            <span class="material-icons-sharp">search</span>
+            <input type="search" placeholder="Search">
+        </div> -->
+        
+        <div class="profile-area">
+            <div class="nav-content">
+                <div class="tools dropdown-toggle" id="trigger-overlay" style="cursor: pointer;">
+                    <span class="material-icons-sharp">dashboard</span>
+                    <p>All Tools</p>
+                    <div class="overlay overlay-hugeinc"><!-- effet ici -->
+                        <button type="button" class="overlay-close">Close</button>
+                        <div>
+                            <ul>
+                                <li class="card"><br>  <a href="/index-import">Accueil</a>  </br></li>
+                                <li class="card"><br>  <a href="/etudiant">Anonymat</a>  </br></li>
+                                <li class="card"><br>  <a href="/correction/juryCorr">Correction</a>  </br></li>
+                                <li class="card"><br>  <a href="/">Deliberation</a>  </br></li>
+                                <li class="card"><br>  <a href="/etudiant/">Import</a>  </br></li>
+                                <!-- <li><a href="@{'/etudiant/edit/' + ${category.id}}">Diaporamas</a></li><br></br> -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="theme-btn">
+                    <span class="material-icons-sharp active">light_mode</span>
+                    <span class="material-icons-sharp">dark_mode</span>
+                </div>
+                <div class="laguage-btn">
+                    <span class="material-icons-sharp">language</span>
+                    <p>Language</p>
+                </div>
+            </div>
+            <div class="profile" style="cursor: pointer;">
+                <h5 th:text="${user.nom}"></h5>
+                <!-- <span class="material-icons-sharp">expand_more</span> -->
+                <div class="profile-photo">
+                    <img src="img/Group 2.png" alt="">
+                </div>
+            </div>
+
+            
+            <!-- <button id="menu-btn">
+                <span class="material-icons-sharp">menu</span>
+            </button> -->
+        </div>
+    </div>
+</nav>
+
+    <section class="tete"> 
+        <h2>ENREGISTREMENT DES ETUDIANTS </h2>
+        <hr> </hr>
+        
+    </section>
+    <div class="table">
+    
+        <div class="table_header">
+                   <div th:if="${participes.id==null}"> <h1> </h1> </div>
+                        <div th:unless="${participes.id==null}"><h1></h1> </div>
+        <div th:if="${participess==null}">
+           <form  id="form" class="table_header" th:action="@{/enregistrer}" th:object="${participes}" method="post">
+         <input type="hidden" th:field="*{id}" th:value="${participes.id}" />  
+            <input   placeholder="Anonymat" type="number" th:field="*{anonymat}" id="anonymat" autocomplete="off"/>
+
+
+	<input placeholder="Nom(s)&Prenom(s)" type="text" id="nom" name="nomEtudiant" autocomplete="off" list="suggestions" th:value="${participes.nomEtudiant}" required/>
+        <datalist id="suggestions"> </datalist>
+        <!-- <button id="replaceButton" type="checkbox">✅</button> -->
+	<input placeholder="Matricule" type="text" id="matricule" th:field="*{matricule}" autocomplete="off" required/>
+
+	<!-- <input placeholder="Niveau_Filiere"/> -->
+	<button  type="submit" class="add_new1"> + Save </button>
+
+    </form>
+</div>
+<div th:if="${participess!=null}">
+    <form  id="form" class="table_header" th:action="@{/enregistrer}" th:object="${participess}" method="post">
+  <input type="hidden" th:field="*{id}" th:value="${participess.id}" />  
+     <input   placeholder="Anonymat" type="number" th:field="*{anonymat}" id="anonymat" autocomplete="off"/>
+
+
+<input placeholder="Nom(s)&Prenom(s)" type="text" id="nom" name="nomEtudiant" autocomplete="off" list="suggestions" th:value="${participess.nomEtudiant}" required/>
+ <datalist id="suggestions"> </datalist>
+ <!-- <button id="replaceButton" type="checkbox">✅</button> -->
+<input placeholder="Matricule" type="text" id="matricule" th:field="*{matricule}" autocomplete="off" required/>
+
+<!-- <input placeholder="Niveau_Filiere"/> -->
+<button  type="submit" class="add_new1"> + Save </button>
+
+</form>
+</div>
+</div>
+	<div class= "table_section">
+	<table id="table"> 
+	<thead>
+	 <tr>
+    <tr>
+    <th>Identifiant</th>
+    <th>Anonymat </th>
+    <th> Nom(s)&Prenom(s)</th>
+    <th> Matricule</th>
+    <th> Fil-Niv</th>
+    <th>Actions </th>
+</thead>
+<tbody>
+    <th:block th:each=" category: ${listetudiant}" th:if="${category.etudiant != null}">
+        <tr>
+            <td>[[${category.id}]]</td>
+            <td >[[${category.anonymat}]] </td>
+            <td >[[${category.nomEtudiant}]] </td>
+            <td >[[${category.matricule}]] </td>
+            <td >[[${category.etudiant.filiere.code}]] </td>
+            <td>
+            <button  class="add_new"><a th:href="@{'/etudiant/edit/' + ${category.id}}">🖋</a></button>
+               
+               <button class="add_news "><a th:href="@{'/etudiant/delete/' + ${category.id}}">❌</a></button>
+            </td>
+            <!--ajout-->
+        </tr>
+    </th:block>
+</tbody>
+     </table>
+     <script th:src="@{/js/update.js}"></script>
+     <script>
+      $('#nom').on("change", function() {
+        console.log("kkoko")
+        // console.log(document.getElementById("nom").value)
+                $.ajax({
+    
+                url: "/complete",
+                type:"GET",
+                dataType: "text",
+                data: {
+                    nom: document.getElementById("nom").value
+                },
+                success: function(data) {
+                    $("#matricule").val(data);
+                }
+            });
+        });
+     </script>
+     <!--<script src="js/updateTable.js"></script>-->
+	</body>
+    </html>

@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http:/www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css"> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <!-- <link rel="stylesheet" href="styles.css"> -->
+    <link rel="stylesheet" type="text/css" th:href="@{css/a.css}" />
+    <link rel="stylesheet" type="text/css" href="css/style1.css" />
+    <!-- ======= GOOGLE FONTS CDN ========= -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <title>Progressive Bar</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="js/modernizr.custom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+</head>
+
+<body>
+    <!-- <header>
+
+    </header> -->
+
+    <nav>
+        <div class="container">
+            <img src="img/Blason.svg" width="130" height="80" alt="" class="logo">
+            <!-- <div class="search-bar">
+                <span class="material-icons-sharp">search</span>
+                <input type="search" placeholder="Search">
+            </div> -->
+
+            <div class="profile-area">
+                <div class="nav-content">
+                    <div class="tools dropdown-toggle" id="trigger-overlay" style="cursor: pointer;">
+                        <span class="material-icons-sharp">dashboard</span>
+                        <p>All Tools</p>
+                        <div class="overlay overlay-hugeinc"><!-- effet ici -->
+                            <button type="button" class="overlay-close">Close</button>
+                            <div>
+                                <ul>
+                                    <li><a href="/index-import">Accueil</a></li>
+                                    <li><a href="/etudiant">Anonymat</a></li>
+                                    <li><a href="#">Correction</a></li>
+                                    <li><a href="/">Deliberation</a></li>
+                                    <!-- <li><a href="@{'/etudiant/edit/' + ${category.id}}">Diaporamas</a></li><br></br> -->
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="theme-btn">
+                        <span class="material-icons-sharp active">light_mode</span>
+                        <span class="material-icons-sharp">dark_mode</span>
+                    </div>
+                    <div class="laguage-btn">
+                        <span class="material-icons-sharp">language</span>
+                        <p>Language</p>
+                    </div>
+                </div>
+                <div class="profile" style="cursor: pointer;">
+                    <h5 th:text="${user.nom}"></h5>
+                    <!-- <span class="material-icons-sharp">expand_more</span> -->
+                    <div class="profile-photo">
+                        <img src="img/Group 2.png" alt="">
+                    </div>
+                </div>
+
+
+                <!-- <button id="menu-btn">
+                    <span class="material-icons-sharp">menu</span>
+                </button> -->
+            </div>
+        </div>
+    </nav>
+    <div class="containe">
+        <div id="rowNull">
+            home / jury / deliberation
+        </div>
+        <div id="row1">
+
+            <div id="row1col1">
+                <h2>Seance Jury Deliberation</h2>
+                <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Animi, dolorem?</p>
+                <div id="adminDeliberation">
+                    <div class="Jury">
+                        <div class="admin" id="admin1">
+                            <i class="fa fa-user-circle fa-lg" aria-hidden="true"></i>
+                        </div>
+                        <div class="role">Rapporteur</div>
+                        <div class="adminName">Pr. Nanvou</div>
+
+                    </div>
+                    <div class="Jury">
+                        <div class="admin" id="admin2">
+
+                        </div>
+                        <div class="role">President</div>
+                        <div class="adminName">Dr.Doundan</div>
+
+                    </div>
+                    <div class="Jury">
+                        <div class="admin" id="admin3">
+                            <i class="fa fa-user-circle-o fa-lg" aria-hidden="true"></i>
+                        </div>
+                        <div class="role">Secretaire</div>
+                        <div class="adminName">Dr.Abessolo</div>
+
+                    </div>
+
+                </div>
+                <div id="popup-overlay">
+                    <div id="popup-content">
+                        <ul id="but">
+                            <button onclick="create()">Creer une seance</button><br><br>
+                            <button onclick="connect()">Se connecter a une seance</button>
+                        </ul>
+                        <button id="but3" style="display: none;"></button>
+                        <button id="close-button">Fermer</button>
+                    </div>
+                </div>
+                <div id="but1" style="display: none;">
+                    <h3>Inviter les membres de la seance avec la cle<span th:value="${cle}"></span></h3>
+                    <div th:each="ens:${enss}">
+                        <ul>
+                            <li th:text="${ens.user.nom}"></li>
+                            <div th:each="ensa:${ens.attribut}">
+                                <p th:text="${ensa.status+','+ensa.filiere.code}"></p>
+                            </div>
+                            <button onclick="envoyer(this)">select</button>
+                        </ul>
+                    </div>
+
+                </div>
+                <div style="display: none;" id="wait">
+                    <div class="loader"></div>
+                    <h3>Veuillez patienter...</h3>
+                </div>
+                <div id="but2" style="display: none;">
+                    <label for="cle">Entrez la cle de la seance</label>
+                    <input type="text" id="cleInput" required></input>
+                    <input type="submit" value="Valider" onclick="SeConnecter()">
+
+
+                </div>
+
+                <div class="progress-steps-container">
+                    <div class="step-progression" id="stepProgression"></div>
+                    <div class="step-number">1</div>
+                    <div class="step-number">2</div>
+                    <div class="step-number">3</div>
+                    <div class="step-number">4</div>
+                    <div class="step-number">5</div>
+                </div>
+                <div class="buttons d-flex justify-content-center">
+                    <button id="prevBtn" class="Mybtn ">Annuler</button>
+                    <button id="nextBtn" class="Mybtn ">Suivant</button>
+
+                </div>
+            </div>
+            <div id="row1col2" style="display: none;">
+                <h4>
+                    Jury deliberation
+                </h4>
+                <!-- This list should be generated by thymeleamf -->
+                <div id="filNiv">
+                    <!-- Thymeleaf here -->
+                    <!-- <ul>
+                            <li><div class="selected"></div><div>INFO-L2</div></li>
+                            <li><div class="selected"></div><div>ICT-3</div></li>
+                            <li><div class="selected"></div><div></div></li>
+                            <li><div class="selected"></div><div></div></li>
+                            <li><div class="selected"></div><div></div></li>                            
+                        </ul> --><br><br>
+                    <div class="rrr" th:each="filiere, iterStat: ${filieres}">
+                        <input type="radio" th:id="'radio' + ${iterStat.count}" name="filiere"
+                            th:value="${filiere.code}">
+                        <label th:for="'radio' + ${iterStat.count}" th:text="${filiere.code}"></label>
+                    </div>
+                    <!-- <div class="rrr">
+                            <input type="radio" id="radio2" name="filiere" value="ictL3">
+                            <label for="radio2">ICT-L3</label>
+                        </div>
+                        <div class="rrr">
+                            <input type="radio" id="radio3" name="filiere" value="mathM1">
+                            <label for="radio3">MATH-M1</label>
+                        </div>
+                        <div class="rrr">
+                            <input type="radio" id="radio4" name="filiere" value="biosL1">
+                            <label for="radio4">BIOS-L1</label>
+                        </div>
+                        <div class="rrr">
+                            <input type="radio" id="radio5" name="filiere" value="phyL2">
+                            <label for="radio5">PHY-L2</label>
+                        </div> -->
+                </div>
+
+            </div>
+        </div>
+        <div id="row2">
+            <form action="">
+                <fieldset id="critere">
+                    <legend id="l1">Edition des criteres</legend><br>
+                    <div id="clist">
+                        <div class="c">
+                            <input class="critere" type="number" name="mgpMin" id="mgpMin" min="0" max="4">
+                            <label class="label" for="mgpMin">MGP MINIMUM </label>
+                        </div>
+                        <div class="c">
+                            <input class="critere" type="number" name="mgpMax" id="mgpMax" min="0" max="4">
+                            <label class="label" for="mgpMax">MGP MAXIMUM </label>
+                        </div>
+                        <!-- <div class="c">
+                            <input class="critere" type="number" min="0" max="100" name="pourcentageCapitalise" id="pourcentageCapitalise">
+                            <label class="label" for="pourcentageCapitalise">POURCENTAGE CAPITALISE (%)</label>    
+                        </div> -->
+                        <div class="c">
+                            <input class="critere" type="number" name="nbrEchec" id="nbrEchec" min="0" max="14">
+                            <label class="label" for="nbrEchec">NOMBRE ECHECS </label>
+                        </div>
+                        <div class="c m" style="width: 7cm;">
+                            <input style="width:fit-content" id="ajoutCritere" class="Mybtn cBtn" type="button"
+                                value="Ajouter Critere">
+                        </div>
+                    </div>
+
+
+                </fieldset><br>
+                <fieldset id="fcriteres">
+
+                    <table name="criteres" id="criteres">
+                        <thead>
+                            <tr>
+                                <th>#Numero</th>
+                                <th>Mgp min</th>
+                                <th>Mgp max</th>
+                                <!-- <th>Pourcentage d'ues capitalise(%)</th> -->
+                                <th>Nombre d'echecs</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodycritere">
+                            <!-- <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td><button class="eye"><i class="bi bi-eye"></i></button> <button class="trash"><i class="bi bi-trash"></i></button> </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td><button class="eye"><i class="bi bi-eye"></i></button> <button class="trash"><i class="bi bi-trash"></i></button> </td>
+                            </tr>
+                            <tr>
+                               <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td><button class="eye"><i class="bi bi-eye"></i></button> <button class="trash"><i class="bi bi-trash"></i></button> </td>
+                            </tr> -->
+                        </tbody>
+                        <tfoot></tfoot>
+                    </table>
+
+                    <!-- <input class="Mybtn cBtn" type="submit" value="Soumettre"> -->
+                </fieldset>
+            </form>
+        </div>
+        <div id="row3">
+            <div>
+                <h3 id="l2">Rapport de deliberation </h3>
+                <p>
+                    Infomations sur la deliberations les crites.
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Id atque libero vel. Delectus
+                    reprehenderit explicabo, voluptatem nisi quaerat dolorem neque omnis?
+                </p>
+            </div>
+            <table id="pvD">
+                <thead>
+                    <tr>
+                        <th>Ue</th>
+                        <th>Nom</th>
+                        <th>Matricule</th>
+                        <th>Ancienne note</th>
+                        <th>Note</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="element : ${listeDesDeliberations}">
+                        <td th:text="${element.codeUe}"></td>
+                        <td th:text="${element.nom}"></td>
+                        <td th:text="${element.matricule}"></td>
+                        <td th:text="${#numbers.formatDecimal(element.oldNote, 2, 2)}"></td>
+                        <td th:text="${#numbers.formatDecimal(element.actuNote, 2, 2)}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="cle" style="display: none;">
+        <span th:value="${cle}"></span>
+    </div>
+    <!-- <div  style="display: none;">
+        <span th:text="${bool} ? 'true' : 'false'"></span>
+        <span th:text="${boolValue} ? 'Vrai' : 'Faux'"></span>
+        <span id="bool"></span>
+    </div> -->
+
+    <footer>
+
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <!-- <script src="scripts.js"></script> -->
+    <!-- <script th:src="@{js/scripts.js}"></script> -->
+    <script src="js/classie.js"></script>
+    <script src="js/demo1.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js" integrity="sha512-1QvjE7BtotQjkq8PxLeF6P46gEpBRXuskzIVgjFpekzFVF4yjRgrQvTG1MTOJ3yQgvTteKAcO7DSZI92+u/yZw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js" integrity="sha512-iKDtgDyTHjAitUDdLljGhenhPwrbBfqTKWO1mkhSFH3A7blITC9MhYon6SjnMhp4o0rADGw9yAC6EW4t5a4K3g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+     <script src="/js/edit.js"></script> -->
+    <!-- <script th:src="@{js/edit.js}"></script>  -->
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <script>
+
+
+
+
+
+                /////navbar
+const themeBtn = document.querySelector('.theme-btn');
+
+themeBtn.addEventListener("click", () => {
+  document.body.classList.toggle("dark-theme");
+})
+//////fin navbar
+
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
+const stepNumbers = document.querySelectorAll(".step-number");
+const stepProgression = document.querySelector("#stepProgression");
+const addCritere = document.getElementById("ajoutCritere");
+const criteres = document.querySelectorAll(".critere");
+const tableauCriteres = document.getElementById('criteres');
+const row2 = document.getElementById('row2');
+const row3 = document.getElementById('row3');
+var fil;
+////////////////////////////////////////////
+
+
+
+/////////////////////////////\progress bar
+
+
+// import './edit.js';
+
+
+
+
+
+
+
+
+
+
+/////////////////////////////////////
+var currentStep = 0;
+let previewStep = currentStep;
+update();
+
+stepNumbers.forEach((step, i)=>{
+    step.onclick = ()=>{
+        currentStep = i + 1;
+        update();
+        updateRequest();
+    }
+});
+
+prevBtn.onclick = ()=>{
+    previewStep = currentStep;
+    currentStep--;
+    update();
+    updateRequest();
+}
+nextBtn.onclick = ()=>{
+    previewStep = currentStep;
+    currentStep++;
+    update();
+    updateRequest();
+}
+
+function update(){
+    prevBtn.disabled = false;
+    nextBtn.disabled = false;
+    if(currentStep < 1){
+        currentStep = 0;
+        // prevBtn.disabled = true;
+        nextBtn.innerText = 'Demarrer la session';
+        prevBtn.style.display = "none";
+        
+    }
+    else if(currentStep >= stepNumbers.length){
+        currentStep = stepNumbers.length;
+        // nextBtn.disabled = true;
+
+        nextBtn.style.display = "none";
+        prevBtn.innerText = 'Telecharger Le Rapport de Deliberation';
+        // console.log( document.querySelectorAll('#rrr'))
+    }
+    else{
+        
+        
+        if(currentStep == 4){
+            prevBtn.innerText = 'Precedant';
+            nextBtn.innerText = 'Terminer';
+        }
+        else if(currentStep == 1){
+            nextBtn.innerText = 'Suivant';
+            nextBtn.disabled=1
+
+            prevBtn.innerText = 'Annuler';
+           
+            var tab = document.querySelectorAll('.rrr')
+            console.log(tab)
+            for(let i = 0; i<tab.length;i++){
+                tab[i].addEventListener("click" , function(){
+                    fil=tab[i].querySelector('input').value
+                    // console.log(tab[i].querySelector('input').value)
+                    nextBtn.disabled=0
+                })
+            }
+          
+        } else if(currentStep == 2){
+            document.getElementById("popup-overlay").style.display = "block";
+            document.getElementById("close-button").addEventListener("click", function() {
+                document.getElementById("popup-overlay").style.display = "none";
+              });
+        }
+        else{
+            //Enable websocket
+            if(currentStep == 3){
+                console.log("*******************************");
+                 editFile();
+
+
+                console.log("*******************************");
+
+            }
+
+            prevBtn.innerText = 'Annuler';
+            nextBtn.innerText = 'Suivant';
+        }
+        document.getElementById("row1col2").style.display="";
+        prevBtn.style.display = "block";
+        nextBtn.style.display = "block";
+    }
+
+    stepProgression.style.width = ((currentStep - 1) / (stepNumbers.length - 1)) * 100 + "%";
+    
+    stepNumbers.forEach((step, i)=>{
+        if(currentStep > i){
+            step.classList.add("active");
+        }
+        else{
+            step.classList.remove("active");
+        }
+    });
+
+
+}
+
+const steps = document.querySelectorAll('.step');
+
+steps.forEach((step, index)=>{
+    step.addEventListener('click',()=>{
+        updateProgress(index);
+    });
+});
+
+
+function updateProgress(selectedIndex){
+    steps.forEach((step,index)=>{
+        if(index <= selectedIndex){
+            step.classList.add("active");
+        }
+        else{
+            step.classList.remove('active');
+        }
+
+    });
+}
+//////////////////////////////////////
+//////////////////////////////////////\criteres deliberation
+addCritere.addEventListener('click',()=>{
+
+    const tr = document.createElement('tr');
+    const td1 = document.createElement('td');
+    td1.innerHTML = tableauCriteres.querySelectorAll('#tbodycritere tr').length + 1;
+    tr.appendChild(td1);
+    criteres.forEach((critere, index)=>{
+        const td = document.createElement('td');
+        td.innerHTML = critere.value;
+        tr.appendChild(td);
+    });
+    const td = document.createElement('td');
+    td.innerHTML = '<button class="eye"><i class="bi bi-eye"></i></button> <button class="trash"><i class="bi bi-trash"></i></button>';
+    tr.appendChild(td);
+    tableauCriteres.querySelector('#tbodycritere').appendChild(tr);
+    Trash();
+})
+
+function Trash(){
+    var tbody;
+    tbody = document.querySelectorAll('#tbodycritere tr');
+    const trashs = document.querySelectorAll('.trash');
+    const eyes = document.querySelectorAll('.eye');
+    trashs.forEach((trash, index)=>{
+        trash.addEventListener('click', (event)=>{
+            event.preventDefault();
+            tbody[index].remove();
+        });
+    });
+    eyes.forEach((eye, index)=>{
+        eye.addEventListener('click', (event)=>{
+            event.preventDefault();
+            var td = tbody[index].getElementsByTagName('td');
+            criteres.forEach((critere, i)=>{
+                critere.value = td[i+1].innerHTML;
+            });
+            tbody[index].remove();
+        })
+    })
+}
+///////////////////////////////////////////////////
+
+function updateRequest(){
+    console.log(previewStep);
+    console.log(currentStep);
+
+    if(currentStep == 1){
+
+        //Requete pour obtenir la liste des status jury.
+        fetch('/getStatus?jelly', {method: 'GET'})
+        .then(function(response) {
+            if (response.ok) {
+              return response.json(); // Convertir la réponse en JSON
+            } else {
+              throw new Error('Erreur de réponse du serveur');
+            }
+          })
+          .then(function(data) {
+            
+            // Utiliser les données renvoyées par le serveur
+          })
+    }
+    if(currentStep == 3){
+        row2.style.display = 'block';
+    }
+    else{
+        row2.style.display = 'none';
+    }
+    if(currentStep == 4 && previewStep == 3){
+        row3.style.display = 'block';
+        let filiere = document.querySelector('input[name="filiere"]:checked').value;
+        let rows = document.querySelectorAll('#tbodycritere tr');
+        const tableData = [];
+        for(let i = 0; i < rows.length; i++){
+            const row = rows[i];
+            const rowData = {};
+
+            var cells = row.getElementsByTagName('td');
+                rowData['mgpMin'] = cells[1].innerText;
+                rowData['mgpMax'] = cells[2].innerText;
+                rowData['nbEchecSem'] = cells[3].innerText;
+            tableData.push(rowData);
+        }
+        let data = {
+            filiere : filiere,
+            tableData : tableData
+        };
+        fetch("/criteresDeliberation", {
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+        })
+        .then(function(response) {
+            // Gérer la réponse du serveur
+            console.log('Donnees envoyees avec succes !')
+            return response.text();
+
+        })
+        .catch(function(error) {
+            // Gérer les erreurs de la requête
+            console.log('Erreur d\'envoie des donnees');
+        })
+        .then(function(data){
+            // Gere les donnees renvoyees par le serveur
+            const tempContainer = document.createElement('div');
+            console.log("data" + data);
+            tempContainer.innerHTML = data;
+
+            // Extract the updated content from the received HTML
+            const updatedContent = tempContainer.querySelector('#pvD');
+
+            // Update the existing element on the page with the updated content
+            const existingElement = document.querySelector('#pvD');
+            existingElement.innerHTML = updatedContent.innerHTML;
+        });
+    }
+    else{
+    row3.style.display = 'none';
+    }
+}
+
+function envoyer(val){
+   var nom = val.parentNode.querySelector("li").innerText;
+   console.log(nom);
+   $.ajax({
+    url: "/envoyer-message", // Endpoint de votre fonction Java
+    type: "POST",
+    data:
+    {nom:nom},
+    // cle:cle,
+    success: function (response) {
+      console.log(response)
+      document.getElementById("popup-overlay").style.display = "none";
+    //   window.location.reload();
+    },
+    error: function () {
+      console.log("Erreur lors de la requête AJAX !");
+    }
+  });
+}
+
+function create(){
+    console.log("create")
+    
+    $.ajax({
+        url: "metting/create",
+        type: "POST",
+        // contentType: "application/json",
+        data: {fil:fil},
+        success: function () {
+            var but = document.getElementById("but")
+            but.style.display = "none"
+            var but1 =document.querySelector("#but1")
+            console.log(but1)
+            but.innerHTML = but1.innerHTML
+            // for(var i=1 ; i< but1.length;i++)
+            // but.innerHTML += but1[i].innerHTML
+            but.style.display = ""
+            document.getElementById("but3").style.display=""
+        },
+        error: function () {
+            console.log(fil)
+          console.log("Erreur lors de la mise à jour !");
+        }
+      });
+    
+    
+}
+
+function connect(){
+    console.log("connect")
+    var but = document.getElementById("but")
+    but.style.display = "none"
+    var but2 =document.getElementById("but2")
+    but.innerHTML = but2.innerHTML
+    but.style.display = ""
+    
+    
+}
+function SeConnecter(){
+    var cle =document.getElementById("cleInput").value;
+    console.log(cle)
+    $.ajax({
+        url: "metting/connect",
+        type: "POST",
+        // contentType: "application/json",
+        data: {cle:cle},
+        success: function (response) {
+            // var bool = document.getElementById("bool").innerHTML//.getElementsByTagName('span');
+            // console.log(bool)
+            // $("#bool").text(response.bool);
+            console.log(response.bool)
+           if(response.bool == true){
+                // console.log("okkk")
+                var but = document.getElementById("but")
+                but.style.display = "none"
+                var but2 =document.getElementById("wait")
+                but.innerHTML = but2.innerHTML
+                but.style.display = ""
+            }  if (response.bool == false){
+                document.getElementById("close-button").click()
+            }
+            
+        },
+        error: function () {
+            // console.log(fil)
+          console.log("Erreur lors de la mise à jour !");
+        }
+    })
+    
+}
+
+
+
+//////////////////////////////////
+// websockets //
+
+const stompClient = null;
+
+
+stompClient.onConnect = (frame) => {
+    setConnected(true);
+    console.log('Connected: ' + frame);
+    stompClient.subscribe('/topic/deliberation', (data) => {
+
+        ///afficher dans le tableau
+        console.log("Websocket");
+        data = JSON.parse(data.body);
+        data.forEach(element => {
+            console.log(element.mgpMin);
+        });
+
+    });
+};
+
+stompClient.onWebSocketError = (error) => {
+    console.error('Error with websocket', error);
+};
+
+stompClient.onStompError = (frame) => {
+    console.error('Broker reported error: ' + frame.headers['message']);
+    console.error('Additional details: ' + frame.body);
+};
+
+
+function Connecte(){
+    console.log("connected");
+    var sockJs = new SockJs("http://localhost:8080/ws");
+    stompClient = Stomp.over(sockJs);
+    stompClient.connect({}, onConnect, onError);
+};
+
+function editFile (){
+    console.log("connect()");
+    Connecte();
+    $( "#ajoutCritere" ).click(() => sendData());
+}
+ 
+
+
+function sendData() {
+    var trs = $("#tbodycritere tr");
+
+    stompClient.publish({
+        destination: "/app/edit",
+        body: JSON.stringify({'data': trs})
+    });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </script>
+</body>
+
+</html>
