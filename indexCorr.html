@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jury correction</title>
+  <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+  <link rel="stylesheet" id="theme-css" href="/assets/css/stylecorr3.css ">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</head>
+
+<body id="body">
+  <nav>
+    <div class="container">
+        <img src="img/Blason.svg"  width="130" height="80" alt="" class="logo" >
+        <!-- <div class="search-bar">
+            <span class="material-icons-sharp">search</span>
+            <input type="search" placeholder="Search">
+        </div> -->
+        
+        <div class="profile-area">
+            <div class="nav-content">
+                <div class="tools dropdown-toggle" id="trigger-overlay" style="cursor: pointer;">
+                    <span class="material-icons-sharp">dashboard</span>
+                    <p>All Tools</p>
+                    <div class="overlay overlay-hugeinc"><!-- effet ici -->
+                        <button type="button" class="overlay-close">Close</button>
+                        <div>
+                            <ul>
+                                <li><a href="/index-import">Accueil</a></li>
+                                <li><a href="/etudiant">Anonymat</a></li>
+                                <li><a href="/correction/juryCorr">Correction</a></li>
+                                <li><a href="/">Deliberation</a></li>
+                                <!-- <li><a href="@{'/etudiant/edit/' + ${category.id}}">Diaporamas</a></li><br></br> -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="theme-btn">
+                    <span class="material-icons-sharp active">light_mode</span>
+                    <span class="material-icons-sharp">dark_mode</span>
+                </div>
+                <div class="laguage-btn">
+                    <span class="material-icons-sharp">language</span>
+                    <p>Language</p>
+                </div>
+            </div>
+            <div class="profile" style="cursor: pointer;">
+                <h5 th:text="${user.nom}"></h5>
+                <!-- <span class="material-icons-sharp">expand_more</span> -->
+                <div class="profile-photo">
+                    <img src="img/Group 2.png" alt="">
+                </div>
+            </div>
+
+            
+            <!-- <button id="menu-btn">
+                <span class="material-icons-sharp">menu</span>
+            </button> -->
+        </div>
+    </div>
+</nav>
+  <section class="main-block container-fluid w-100 m-0" id="main-block">
+
+    <!-- <header class="w-100 entete1 p-0" >
+    
+      
+        
+    </header> -->
+    <!-- <header class="w-100  row"
+      style="border-bottom: solid 1px gray; margin: 0; margin-bottom: 2%; height:80px; ">
+      <div id="theme-bt">
+        <span style="font-size: 100%; ">theme</span>
+        <table style="width: 100%; margin:0;">
+
+          <tr>
+            <td style="background-color: aliceblue; width:30%; color:rgb(9, 10, 10);" onclick="changeTheme(1)" > Ligth </td>
+            <td style="background-color: black; color:aliceblue; width:30%"  onclick="changeTheme(2)" >Dark</td>
+            <td style="background-color: rgb(59, 15, 106); color:aliceblue; width:40%"  onclick="changeTheme(3)" >Nigth</td>
+          </tr>
+        </table>
+      </div>
+    </header> -->
+    <main class="" id="block-main1">
+      <div class="row w-100 m-0">
+        <div class="block-main col-9 ">
+          <!-- BLOCK PRINCIPALE -->
+          <div class="container-fluid pt-4">
+            <span class=" text-capitalize "
+              style="text-shadow: 2px 2px 2px rgb(75, 73, 73); font-size:90%; font-weight:bold;">Seance jury de
+              correction</span>
+          </div>
+          <div class="row w-100">
+            <!-- icone des membres du jury -->
+            <div class="col">
+              <div class="row" style="padding-left: 16%; margin-top: 3%;">
+                <div class="col p-0 m-0" style="text-align: left; ">
+                  <div class="cercle-icon-1"> <img src="/assets/icon/Artboard 6_users.svg" alt=""
+                      style="width: 100%; height: 80%;"> </div>
+                  <h6>President</h6>
+                </div>
+                <div class="col p-0 m-0" style="text-align: left;">
+                  <div class="cercle-icon-2 ms-3"><img src="/assets/icon/Artboard 8_users.svg" alt=""
+                      style="width: 100%; height: 80%;"></div>
+                  <h6 class="w-100" style="margin-right: 100%; ">Vice president</h6>
+                </div>
+                <div class="col p-0 m-0 " style="text-align: left; ">
+                  <div class="cercle-icon-3 ms-2"><img src="/assets/icon/Artboard 7_users.svg" alt=""
+                      style="width: 100%; height: 80%;"></div>
+                  <h6>Rapporteur</h6>
+                </div>
+                <div class="col p-0 m-0" style="text-align: left;">
+                  <div class="cercle-icon-4"><img src="/assets/icon/Artboard 17_users.svg" alt="" style="width: 100%;">
+                  </div>
+                  <h6>Membres </h6>
+                </div>
+              </div>
+              <!-- Barre de chargement -->
+              <div class=" h-50 " style="display: flex; flex-direction: row; align-items: center; font-size: 100%;">
+                <div class=" circle-load" id="circle-load1" style="background-color: rgb(108, 32, 249);">1</div>
+                <div class=" line-load" id="line-load1"></div>
+                <div class=" circle-load" id="circle-load2">2</div>
+                <div class=" line-load" id="line-load2"></div>
+                <div class=" circle-load" id="circle-load3">3</div>
+                <div class=" line-load" id="line-load3"></div>
+                <div class=" circle-load" id="circle-load4">4</div>
+              </div>
+            </div>
+
+          </div>
+          <!-- bouton demarere -->
+
+          <div class="w-100 h-25 pt-5" id="bouton-dem-blck"
+            style="display: flex; flex-direction: column; align-items: center; justify-content: center; font-size:100% ;">
+
+            <input value="Demarer" type="button" onclick="active_dem_btn()"
+              style="border: solid 1px rgb(126, 124, 129); background-color: rgba(91, 85, 102, 0.611); font-size: 63%; border-radius: 3px; color: rgb(252, 252, 252); box-shadow: 2px 2px 2px rgb(65, 64, 64); width: 20%; height: 35%; font-weight: 500;"
+              id="bouton-dem">
+          </div>
+
+          <!-- formulaire pour la selection de l'ue a modifier  -->
+          <div class="w-100 h-50 pt-5" id="form-check-ue" style="display: none;">
+            <form class="check-ue" id="check-ue">
+              <div class="row py-2 ">
+                <div class="col-5"> <label class="me-4" for="matricule">Matricule</label><input type="text"
+                    name="matricule" id="matricule" placeholder="matricule"> </div>
+                <div class="col-5"><label class="me-4" for="ue">Ue</label><input type="text" name="ue" id="ue"
+                    placeholder="unite d'enseignement" required></div>
+              </div>
+              <div class="row py-2">
+                <div class="col-5"> <label class="me-4" for="nom">Nom</label>
+                  <input type="text" name="nom" id="nom" placeholder="nom de l'etudiant">
+                </div>
+                <div class="col-5"><label class="me-4" for="ue">Eval</label>
+                  <select name="eval" id="eval" style="width: 60%;" required>
+                    <option value="cc">CC</option>
+                    <option value="tp">TP</option>
+                    <option>SN</option>
+                  </select>
+                  <!-- <input type="text" name="eval" id="eval" value="cc"> -->
+                </div>
+              </div>
+              <!-- bouton pour afficher la table de modification -->
+              <div class="w-100 pb-3" style="display: flex; flex-direction: row; justify-content: right;">
+                <input class="me-3" value="Valider" onclick="champ_valide()" type="button"
+                  style="border: solid 1px rgb(126, 124, 129); background-color: rgba(111, 42, 221, 0.611); font-size: 18px; border-radius: 5px; color: aliceblue; box-shadow: 1px 1px 1px rgb(65, 64, 64); width: 10%; height: 100%;">
+
+              </div>
+            </form>
+          </div>
+
+          <div class="w-100 form-recap" id="form-recap">
+            <table>
+              <tr class="line1">
+                <td class="coln">id</td>
+                <td class="coln">Num</td>
+                <td class="coln">Nom rapport</td>
+                <td class="coln">Date modif</td>
+                <td class="coln">Statut</td>
+                <td class="coln">Action</td>
+              </tr>
+              <tr class="line2">
+                <td class="coln1" id="coln-rap1">1</td>
+                <td class="coln1" id="coln-rap2">12</td>
+                <td class="coln1" id="coln-rap3"></td>
+                <td class="coln1" id="coln-rap4">2023-08-12</td>
+                <td class="coln1" id="coln-rap5">ok</td>
+                <td class="coln1" id="coln-rap6">
+                  <input class="me-3 mt-4" value="PV" onclick="telechargerPDF()" type="button"
+                    style="border: solid 1px rgb(126, 124, 129); background-color: rgba(72, 230, 143, 0.611); font-size: 18px; border-radius: 5px; color: aliceblue; box-shadow: 1px 1px 1px rgb(65, 64, 64); width: 30%; height: 100%;">
+
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="w-100 form-modif p-5" id="form-modif">
+            <table id="form-modif-table">
+              <tr id="form-modif-line1">
+                <td id="">num</td>
+                <td>matricule</td>
+                <td>nom</td>
+                <td>Ano-CC</td>
+                <td>Note CC</td>
+                <td>Ano</td>
+                <td>New note</td>
+              </tr>
+
+            </table>
+
+            <div class="w-100 pb-3" style="display: flex; flex-direction: row; justify-content: right;">
+              <input class="me-3 mt-4" onclick="printFormRecap()" value="Valider" type="button"
+                style="border: solid 1px rgb(126, 124, 129); background-color: rgba(111, 42, 221, 0.611); font-size: 18px; border-radius: 5px; color: aliceblue; box-shadow: 1px 1px 1px rgb(65, 64, 64); width: 10%; height: 100%;">
+            </div>
+          </div>
+
+        </div>
+
+        <div class=" col-3 ">
+          <div class="container-fluid lateral p-0" style="text-align: left;">
+            <!-- BLOCK LATERALE  -->
+            <h5 class="m-3" style="text-align: center; font-weight:bold;">jury de correction</h5>
+
+            <div class="" style="width: 100%;">
+
+            </div>
+
+            <div class=" filiere0" id="filiere1">
+              <button class=" filiere-bt 1" id="filiere-bt1" onclick="choisir_Ue('1')">
+                INF-L3
+              </button>
+
+              <button class="filiere-bt-t annul1" id="bt-annuler1" onclick="annuler_Seance('bt-annuler1')">
+                Annuler
+              </button>
+            </div>
+            <div class="filiere0" id="filiere1">
+
+              <button class="col-8 filiere-bt" id="filiere-bt1 2" onclick="choisir_Ue('2')">
+                INF-L2
+              </button>
+
+              <button class="filiere-bt-t annul2" id="bt-annuler1" onclick="annuler_Seance('bt-annuler2')">
+                Annuler
+              </button>
+            </div>
+            <!-- <div class="filiere0" id="filiere2">
+
+              <button class="col-8 filiere-bt">
+                INF-L2
+              </button>
+            </div>
+            <div class="filiere0" id="filiere3"> -->
+
+          
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+    </main>
+
+  </section>
+  <!-- popup pour informer l'utilisateur sur l'action a mener -->
+
+  <div id="popu_warm" style="display: none;">
+    <p id="content-popup">veillez choisir la filiere <br> avant de demarer la seance !</p>
+    <button onclick="closePopup()">Fermer</button>
+  </div>
+  <script src="/assets/js/bootstrap.min.js"></script>
+  <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+  <script src="/assets/js/correction.js"></script>
+</body>
+
+</html>

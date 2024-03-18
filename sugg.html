@@ -1,0 +1,130 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title> page </title>
+        <link rel="stylesheet" type="text/css" th:href="@{/webjars/boostrap/css/boostrap.min.css}" />
+    </head>
+    <body>
+        <h1> create </h1>
+        <script>
+        $(document).ready(function() {
+            $('#nom').on("input",function() {
+                var nomEtudiant= $(this).val();
+                if (nomEtudiant.length>=1) {
+                    $.ajax({
+                    	type:'GET',
+                        url: '/suggestions',
+                        data: { nomEtudiant: nomEtudiant },
+                        success: function(data) {
+                            $('#suggestions').empty();
+                            data.forEach(function(suggestion) {
+
+                                $('#suggestions').append("<option value='"+ suggestion + "'>");
+                            console.log(suggestion);
+                            });
+    $("option").on("click",function(){
+        var suggestion=$(this).val();
+        $("#nom").val(suggestion);
+        $.ajax({
+            url:'/suggestions/etudiants/matricule',
+            data:{nom:suggestion},
+            success:function(matricule){
+                $("#matricule").val(matricule);
+                console.log(matricule);
+            }
+        })
+    })
+
+ }
+  });
+
+                 /*   $.ajax({
+                        url: '/suggestions/professeurs',
+                        data: { term: term },
+                        success: function(data) {
+                            $('#suggestions').html('');
+                            data.forEach(function(suggestion) {
+                                $('#suggestions').append('<li>' + suggestion + '</li>');
+                            });
+                        }
+                    });*/
+
+                } 
+            });
+       })
+/*
+const input = document.getElementById('nom');
+const suggestionsList= document.getElementById('suggestions');
+var matricule=document.getElementById('matricule');
+
+input.addEventListener('input',() =>{
+const nom=input.value;
+	if(nom.length>=1){
+                fetch(/suggestions/etudiants?nom=${nom})
+                .then(response=>response.json())
+                .then(suggestions=>{
+                    suggestionsList.innerHTML='';
+                    suggestions.forEach(suggestion=>{
+
+                    const li=document.createElement('li');
+                    
+                    li.textContent=suggestion;
+                    li.addEventListener('click',()=>{
+                        input.value=suggestion;
+                        suggestionsList.innerHTML='';
+                        });
+                suggestionsList.appendChild(li);
+                });
+                });
+                
+                }
+                else {
+                suggestionsList.innerHTML='';
+                }
+            });*/
+    </script>
+        <div class="container text-center"> 
+            <form th:action="@{/enregistrer}" th:object="${participes}" method="post" style="max-width:600px;margin:0 auto">
+              <fieldset>
+            <div class="m-3">
+              
+                <div class="form-group row">
+                    <label class="col-form-label col-sm-4"> Nom de l'etudiant: </label>
+               
+                <div class="col-sm-8">
+                    <input type="text"name="nomEtudiant" id="nom" autocomplete="off"  list="suggestions" th:value="${participes.nomEtudiant}" class="form-control" required />
+                </div>
+               
+            </div>
+             <datalist id="suggestions"> </datalist>
+
+
+                <div class="form-group row">
+                    <label clas ="col-form-label col-sm-4"> matricule</label>
+                <div>
+                    <input type="text"   th:field="*{matricule}" autocomplete="off" class="form-control" required/>
+                </div>
+            </div>
+
+                
+                </div>
+
+            
+
+                </div>
+                <div class="col-sm-8">
+                    <button type="submit" class="btn btn-primary">SAVE </button>
+                </div>
+           
+          </fieldset>
+           </div>
+            </form>
+	            
+
+
+        </div>
+    </body>
+</html>
+		

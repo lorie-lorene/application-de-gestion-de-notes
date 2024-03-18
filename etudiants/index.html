@@ -1,0 +1,273 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- <link href="/css/a.css" rel="stylesheet"> -->
+  <link href="/css/index11.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="../css/style1.css" />
+
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <title>page2</title>
+  <!-- ======= MATERIAL ICON CDN ========= -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+
+  <!-- ======= GOOGLE FONTS CDN ========= -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- <link rel="stylesheet" type="text/css" href="css/style1.css" /> -->
+  <script src="../js/modernizr.custom.js"></script>
+
+</head>
+
+<body>
+
+
+  <nav>
+    <div class="container">
+      <img src="/img/Blason.svg" width="130" height="80" alt="" class="logo">
+      <!-- <div class="search-bar">
+            <span class="material-icons-sharp">search</span>
+            <input type="search" placeholder="Search">
+        </div> -->
+
+      <div class="profile-area">
+        <div class="nav-content">
+          <div class="tools dropdown-toggle" id="trigger-overlay" style="cursor: pointer;">
+            <span class="material-icons-sharp">dashboard</span>
+            <p>All Tools</p>
+            <div class="overlay overlay-hugeinc"><!-- effet ici -->
+              <button type="button" class="overlay-close">Close</button>
+              <div>
+                <ul>
+                  <li class="card"><br> <a href="/index-import">Accueil</a> </br></li>
+                  <li class="card"><br> <a href="/etudiant">Anonymat</a> </br></li>
+                  <li class="card"><br> <a href="/correction/juryCorr">Correction</a> </br></li>
+                  <li class="card"><br> <a href="/">Deliberation</a> </br></li>
+                  <li class="card"><br> <a href="/etudiant/">Deliberation</a> </br></li>
+                  <!-- <li><a href="@{'/etudiant/edit/' + ${category.id}}">Diaporamas</a></li><br></br> -->
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="theme-btn">
+            <span class="material-icons-sharp active">light_mode</span>
+            <span class="material-icons-sharp">dark_mode</span>
+          </div>
+          <div class="laguage-btn">
+            <span class="material-icons-sharp">language</span>
+            <p>Language</p>
+          </div>
+        </div>
+        <div class="profile" style="cursor: pointer;">
+          <h5 th:text="${user.nom}"></h5>
+          <!-- <span class="material-icons-sharp">expand_more</span> -->
+          <div class="profile-photo">
+            <img src="img/Group 2.png" alt="">
+          </div>
+        </div>
+
+
+        <!-- <button id="menu-btn">
+                <span class="material-icons-sharp">menu</span>
+            </button> -->
+      </div>
+    </div>
+  </nav>
+  <br><br>
+
+  <div id="container-page2">
+    <div id="big-group">
+
+      <button id="bt1-page2" onclick="afficher_tableau('bt1-page2')"><i class="bi bi-person-circle"></i></i><br>
+        Utilisateurs</button>
+      <button id="bt2-page2" onclick="afficher_tableau('bt2-page2')"><i
+          class="bi bi-book-fill"></i><br>Enseignements</button>
+      <button id="bt3-page2" onclick="afficher_tableau('bt3-page2')"><i class="bi bi-mortarboard-fill"></i><br>Filiere
+        Niveau</button>
+      <button id="bt4-page2" onclick="afficher_tableau('bt4-page2')"><i
+          class="bi bi-bookmark-star-fill"></i></i><br>Jury</button>
+      <button id="bt5-page2" onclick="afficher_tableau('bt5-page2')"><i
+          class="bi bi-people-fill"></i><br>Etudiants</button>
+
+
+    </div>
+    <div id="pagebt5">
+      <div id="watch">
+        <table id="customers-page2" class="table1">
+          <tr>
+            <th>Maricule </th>
+            <th>Nom Complet</th>
+            <!-- <th>Prenom</th> -->
+            <th>Status paiment</th>
+            <th>Filiere</th>
+            <th>Action</th>
+          </tr>
+          <tbody>
+            <tr th:each="etudiant : ${etudiant}">
+              <td><span th:text="${etudiant.matricule}"></span></td>
+              <td><span th:text="${etudiant.nom}"></span></td>
+              <!-- <td><span th:text="${etudiant.prenom}"></span></td> -->
+              <td><span th:text="${etudiant.statutPaiement}"></span></td>
+              <td><span th:if="${etudiant.filiere == null}">null</span><span th:if="${etudiant.filiere != null}"
+                  th:text="${etudiant.filiere.code}"></span></td>
+              <td><a th:attr="data-id=${etudiant.id}" id="pay" onclick="addPayment(this)"><i
+                    class="bi bi-credit-card"></i></a></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="pagination" id="paginationContainer">
+        </div>
+        <div id="consulting-block">
+          <form th:action="@{/etudiant/import}" id="formbtn5" method="post" enctype="multipart/form-data">
+            <button id="upload1" onclick="change('formbtn5')"><label for="file">Importer</label></button>
+            <input id="input-file" type="file" accept=".xlsx, .xls, .csv" name="file"
+              onchange="document.getElementById('formbtn5').submit();">
+
+
+            <!-- <button id="valider"><label for="file">importer</label></button>
+            <input  type="file" value="importer" name="file"  name="file" onchange="document.getElementById('formbtn5').submit();"> -->
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="pagebt2" style="display: none;">
+      <div id="watch">
+        <table id="customers-page2" class="table2">
+          <tr>
+            <th>Id </th>
+            <th>Code</th>
+            <th>Intitule</th>
+            <th>Credit</th>
+            <th>Filiere</th>
+          </tr>
+          <tbody>
+            <tr th:each="ue : ${ue}">
+              <td><span th:text="${ue.id}"></span></td>
+              <td><span th:text="${ue.code}"></span></td>
+              <td><span th:text="${ue.intitule}"></span></td>
+              <td><span th:text="${ue.credit}"></span></td>
+              <td><span th:if="${ue.filiere == null}">null</span><span th:if="${ue.filiere != null}"
+                  th:text="${ue.filiere.code}"></span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="pagination" id="paginationContainer">
+        </div>
+        <div id="consulting-block">
+          <form th:action="@{/ue/import}" id="formbtn2" method="post" enctype="multipart/form-data">
+            <button id="upload1" onclick="change('formbtn2')"><label for="file">Importer</label></button>
+            <input id="input-file" type="file" accept=".xlsx, .xls, .csv" name="file"
+              onchange="document.getElementById('formbtn2').submit();">
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="pagebt3" style="display: none;">
+      <div id="watch">
+        <table id="customers-page2" class="table3">
+          <tr>
+            <th>Id </th>
+            <th>Code</th>
+            <th>Libele</th>
+          </tr>
+          <tbody>
+            <tr th:each="filiere : ${filiere}">
+              <td><span th:text="${filiere.id}"></span></td>
+              <td><span th:text="${filiere.code}"></span></td>
+              <td><span th:text="${filiere.libelle}"></span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="pagination" id="paginationContainer">
+        </div>
+        <div id="consulting-block">
+          <form th:action="@{/filiere/import}" id="formbtn3" method="post" enctype="multipart/form-data">
+            <button id="upload1" onclick="change('formbtn3')"><label for="file">Importer</label></button>
+            <input id="input-file" type="file" accept=".xlsx, .xls, .csv" name="file"
+              onchange="document.getElementById('formbtn3').submit();">
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="pagebt4" style="display: none;">
+      <div id="watch">
+        <table id="customers-page2" class="table4">
+          <tr>
+            <th>id </th>
+            <th>User</th>
+          </tr>
+          <tbody>
+            <tr th:each="jury : ${jury}">
+              <td><span th:text="${jury.id}"></span></td>
+              <td><span th:text="${jury.user.username}"></span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="pagination" id="paginationContainer">
+        </div>
+        <div id="consulting-block">
+          <form th:action="@{/jury/import}" id="formbtn4" method="post" enctype="multipart/form-data">
+            <button id="upload1" onclick="change('formbtn4')"><label for="file">Importer</label></button>
+            <input id="input-file" type="file" accept=".xlsx, .xls, .csv" name="file"
+              onchange="document.getElementById('formbtn4').submit();">
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="pagebt1" style="display: none;">
+      <div id="watch">
+        <table id="customers-page2" class="table5">
+          <tr>
+            <th>Id </th>
+            <th>Actif</th>
+            <th>User</th>
+          </tr>
+          <tbody>
+            <tr th:each="enseignant: ${enseignant}">
+              <td><span th:text="${enseignant.id}"></span></td>
+              <td><span th:text="${enseignant.actif}"></span></td>
+              <td><span th:text="${enseignant.user.username}"></span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="pagination" id="paginationContainer">
+        </div>
+        <div id="consulting-block">
+          <form th:action="@{/enseignant/import}" id="formbtn1" method="post" enctype="multipart/form-data">
+            <button id="upload1" onclick="change('formbtn1')"><label for="file">Importer</label></button>
+            <input id="input-file" type="file" accept=".xlsx, .xls, .csv" name="file"
+              onchange="document.getElementById('formbtn1').submit();">
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="pageform" style="display: none;">
+      <form id="payement-id" th:action="@{/etudiant/savePaiement/{id}}" th:object="${paiement}" method="post">
+        <label for="Bank">Bank:</label>
+        <input type="text" th:field="*{nomBank}">
+        <label for="DatePaiement">Date Paiement:</label>
+        <input type="date" th:field="*{datePaiement}">
+        <label for="NumeroRecue">Numero Recue:</label>
+        <input type="text" th:field="*{numRecu}">
+        <label for="Montant">Montant:</label>
+        <input type="number" th:field="*{montant}">
+        <button type="submit">Enregistrer</button>
+      </form>
+    </div>
+
+  </div>
+
+
+</body>
+<script src="../js/index.js"></script>
+<script src="../js/xlsx.full.min.js"></script>
+<script src="../js/classie.js"></script>
+<script src="../js/demo1.js"></script>
+
+</html>

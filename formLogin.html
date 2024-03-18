@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form th:action="@{/login}" method="post">
+        <h3>connecter</h3>
+        <label for="nom">Nom</label> <input type="text" id="nom" name="nom">
+        <label for="password">Mot de pass</label> <input type="password" id="pass" name="password">
+        <button type="submit">Se connecter</button>
+    </form>
+    <form action="@{/account}" method="get">
+     <button type="submit">S'inscrir</button>
+    </form>
+</body>
+</html>
